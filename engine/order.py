@@ -1,11 +1,7 @@
-
-
-
-
-
+#!/usr/bin/python
 
 import sys
-
+import datetime
 
 class OrderSide(object):
     BUY  = 0
@@ -26,6 +22,7 @@ class Order(object):
         self.type = type
 
         self.id = id
+        self.timestamp = datetime.datetime.now()
 
     def __str__(self):
         return 'OrderID:%s Price:%f Quantity:%d' % (self.id, self.executedPrice, self.quantity)
