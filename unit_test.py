@@ -3,10 +3,11 @@
 from trading.server.udpserver import *
 from trading.engine.order import *
 from trading.engine.market import *
+from trading.engine.instrument import *
 
 import unittest
 
-class TestUDP(unittest.TestCase):
+class TestInstrument(unittest.TestCase):
 
     def setUp(self):
         pass
@@ -82,4 +83,6 @@ class TestUDP(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    cases = ['test_order']
+    suite = unittest.TestSuite(map(TestInstrument, cases))
+    unittest.TextTestRunner(verbosity=2).run(suite)
