@@ -7,4 +7,4 @@ install:
   - pip install pep257
 # command to run tests
 script:
-  - unit_test.py
+  - python ./unit_test.py

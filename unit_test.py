@@ -1,3 +1,4 @@
+#!/usr/bin/python
 
 from trading.engine.order import Order, OrderSide
 from trading.engine.market import Market
