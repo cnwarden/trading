@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
-from trading.engine.order import Order, OrderSide
-from trading.engine.market import Market
-from trading.engine.instrument import Instrument
+from engine.order import Order, OrderSide
+from engine.market import Market
+from engine.instrument import Instrument
 import unittest
 
 """
