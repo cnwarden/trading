@@ -26,17 +26,21 @@ class Instrument(object):
             self.askOrders[order.executedPrice] = [] if not self.askOrders.has_key(order.executedPrice) else self.askOrders[order.executedPrice]
             self.askOrders[order.executedPrice] += [order]
 
+        if callable(getattr(self.callback, 'onOrderAdded')):
+            self.callback.onOrderAdded(order, self)
+
     def erase(self, order_id):
 
         def __erase_bidask(sideOrders):
             for item in sideOrders.iteritems():
                 for i, order in enumerate(item[1]):
                     if order.id == order_id:
+                        if callable(getattr(self.callback, 'onOrderRemoved')):
+                            self.callback.onOrderChanged(order, self)
                         del item[1][i]
                         if not item[1]:
                             del sideOrders[item[0]]
-                            if callable(getattr(self.callback, 'onOrderRemoved')):
-                                self.callback.onOrderChanged(order)
+                            
                         return
 
         __erase_bidask(self.bidOrders)
@@ -52,7 +56,6 @@ class Instrument(object):
             for orderlist in self.askOrders.itervalues():
                 total += len(orderlist)
         return total
-
 
     def get_total_orders(self):
         return self.get_orders_by_side(OrderSide.BUY) + self.get_orders_by_side(OrderSide.SELL)
@@ -89,19 +92,19 @@ class Instrument(object):
                         order.quantity -= remainSize
                         remainSize = 0
                         if callable(getattr(self.callback, 'onOrderChanged')):
-                            self.callback.onOrderChanged(order)
+                            self.callback.onOrderChanged(order, self)
                         break
                     elif order.quantity < remainSize:
                         order.quantity = 0
                         remainSize -= order.quantity
                         if callable(getattr(self.callback, 'onOrderChanged')):
-                            self.callback.onOrderChanged(order)
+                            self.callback.onOrderChanged(order, self)
                         continue
                     else:
                         order.quantity = 0
                         remainSize = 0
                         if callable(getattr(self.callback, 'onOrderChanged')):
-                            self.callback.onOrderChanged(order)
+                            self.callback.onOrderChanged(order, self)
 
                     if remainSize == 0:
                         break
@@ -111,7 +114,7 @@ class Instrument(object):
 
             #top orders generate trade
             if callable(getattr(self.callback, 'onTrade')):
-                self.callback.onTrade()
+                self.callback.onTrade(self)
 
             self.bidOrders[executedPrice] = [order for order in self.bidOrders[executedPrice] if order.quantity >0 ]
             self.askOrders[executedPrice] = [order for order in self.askOrders[executedPrice] if order.quantity >0 ]

@@ -7,13 +7,16 @@ class BasicTradingCallback(object):
         simple callback class, work as NullCallback
     """
 
-    def onTrade(self):
+    def onTrade(self, instrument):
         pass
 
-    def onOrderChanged(self, order):
+    def onOrderAdded(self, order, instrument):
         pass
 
-    def onOrderRemoved(self, order):
+    def onOrderChanged(self, order, instrument):
+        pass
+
+    def onOrderRemoved(self, order, instrument):
         pass
 
     
